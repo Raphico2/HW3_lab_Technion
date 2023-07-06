@@ -109,4 +109,3 @@ Submitted files
 -	GNN_classification.py : Contains the model GCN, the hyper parameter of the model, the training parameters, the training function and the evaluation function 
 -	Utils.py : Contains some utils function such as the function for mask creation, subgraph visualization and the function of weight-class attribution for the weighted loss
 -	Predict.py: The file that load our model and test it to the evaluation set. 
-![image](https://github.com/Raphico2/HW3_lab_Technion/assets/117974620/99b5473a-b325-47b4-8263-c86103dce9e3)
