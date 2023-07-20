@@ -1,6 +1,7 @@
 import torch
 from dataset import HW3Dataset
 from GAT_classification import GATClassifierLinear, test
+import pandas as pd
 from utils import create_mask
 
 #model parameters
@@ -16,9 +17,14 @@ if __name__ == '__main__':
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     data = data.to(device)
     model = GATClassifierLinear(HIDDEN_DIM, heads=HEADS).to(device)
-    model.load_state_dict(torch.load('model_epoch_330.pt'))
-    mask_train, mask_test = create_mask(data)
-    accuracy = test(model, data, mask_test)
+    model.load_state_dict(torch.load('model_epoch_340.pt'))
+    accuracy, pred = test(model, data)
+    predictions = {'idx': [], 'prediction': []}
+    for i in range(len(pred)):
+        predictions['idx'].append(i)
+        predictions['prediction'].append(pred[i].item())
+    prediction_df = pd.DataFrame(predictions)
+    prediction_df.to_csv('prediction.csv', index=False)
     print("accuracy : " + str(accuracy))
 
 

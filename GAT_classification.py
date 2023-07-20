@@ -72,21 +72,24 @@ def train(model, criterion, optimizer, data, mask_train):
     optimizer.step()
     return loss
 
-def test(model, data, mask_test):
+def test(model, data, mask_test=None):
     model.eval()
     total_correct = 0
     out = model(data.x, data.edge_index)
     prediction = out.argmax(dim=1)
-    test_prediction = prediction[mask_test]
-    real_label = data.y[mask_test]
+    if mask_test !=None:
+        test_prediction = prediction[mask_test]
+        real_label = data.y[mask_test]
+    else:
+        test_prediction = prediction
+        real_label = data.y
     for i in range(0, len(test_prediction)):
         y_pred = test_prediction[i].item()
         y_real = real_label[i].squeeze().item()
         if y_pred == y_real:
             total_correct+=1
     test_accuracy = total_correct/len(real_label)
-    return test_accuracy
-
+    return test_accuracy, test_prediction
 
 if __name__ == '__main__':
 
@@ -112,7 +115,7 @@ if __name__ == '__main__':
         losses.append(loss.item())
         print(f'Epoch: {epoch}, loss: {loss: .4f}')
         if epoch%10==0:
-            accuracy = test(model, data, mask_test)
+            accuracy, prediction = test(model, data, mask_test)
             accuracies.append(accuracy)
             print(f"Accuracy: {accuracy}")
             torch.save(model.state_dict(), "model_epoch_"+str(epoch)+".pt")
